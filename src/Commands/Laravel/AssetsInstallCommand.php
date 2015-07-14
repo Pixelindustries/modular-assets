@@ -13,7 +13,7 @@ class AssetsInstallCommand extends Command
     /**
      * @var string
      */
-    protected $signature = 'assets:install {--installer?} {--directory} {--production}';
+    protected $signature = 'assets:install {--installer?} {--directory=} {--production}';
 
     /**
      * @var string
@@ -52,7 +52,7 @@ class AssetsInstallCommand extends Command
 
     public function handle()
     {
-        $installers  = $this->input->getOption('installer');
+        $installers  = $this->input->hasOption('installer') ? $this->input->getOption('installer') : ['npm', 'bower'];
         $production  = $this->input->getOption('production');
         $directories = $this->directories->getFromInput($this->input);
         $finder      = $this->finders->getForDirectories($directories);

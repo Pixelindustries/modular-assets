@@ -1,0 +1,23 @@
+{
+    "name": "pixelindustries/modular-assets",
+    "description": "Runs popular front-end dependency managers for modular projects.",
+    "authors": [
+        {
+            "name": "Max van der Stam",
+            "email": "max@pixelindustries.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "autoload": {
+      "psr-4": {
+          "Pixelindustries\\ModularAssets\\": "src/"
+      }
+    },
+    "require": {
+        "symfony/finder": "^2.7"
+    },
+    "require-dev": {
+        "phpspec/phpspec": "^2.2",
+        "symfony/console": "^2.7"
+    }
+}

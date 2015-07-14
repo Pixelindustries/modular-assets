@@ -1,0 +1,22 @@
+{
+  "name": "Beta",
+  "version": "0.0.0",
+  "authors": [
+    "Max van der Stam <max@pixelindustries.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "get-size": "~1.2.2",
+    "eventEmitter": "~4.2.11"
+  },
+  "devDependencies": {
+    "qunit": "~1.16.0"
+  }
+}

@@ -8,13 +8,11 @@ class FindersRepository
 {
 
     /**
-     * @param array $directories
+     * @param string $directory
      * @return Finder
      */
-    public function getForDirectories(array $directories)
+    public function getForDirectory($directory)
     {
-        if (empty($directories)) throw new \InvalidArgumentException('No directories found');
-
-        return (new Finder)->depth(1)->in($directories);
+        return (new Finder)->depth(1)->in($directory);
     }
 }

@@ -3,11 +3,13 @@
 namespace Pixelindustries\ModularAssets\Commands\Symfony;
 
 
+use Pixelindustries\ModularAssets\Support\HandlesAssetInstall;
 use Pixelindustries\ModularAssets\Contracts\InstallerInterface;
 use Pixelindustries\ModularAssets\Repositories\DirectoriesRepository;
 use Pixelindustries\ModularAssets\Repositories\FindersRepository;
 use Pixelindustries\ModularAssets\Repositories\InstallersRepository;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -15,20 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class AssetsInstallCommand extends Command
 {
 
-    /**
-     * @var FindersRepository
-     */
-    protected $finders;
-
-    /**
-     * @var DirectoriesRepository
-     */
-    protected $directories;
-
-    /**
-     * @var InstallersRepository
-     */
-    protected $installers;
+    use HandlesAssetInstall;
 
     /**
      * Constructor.
@@ -51,20 +40,17 @@ class AssetsInstallCommand extends Command
 
     protected function configure()
     {
-        $this->setName('assets:install')
+        $this->setName('install')
              ->setDescription('Install assets')
-             ->addOption(
-                 'installer',
-                 null,
-                 InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
-                 'One or more installers that will be used (e.g. bower, npm)',
-                 ['npm', 'bower']
-             )
-             ->addOption(
+             ->addArgument(
                  'directory',
-                 'd',
-                 InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
-                 'One or more directories to process'
+                 InputArgument::REQUIRED,
+                 'Directory to process'
+             )
+             ->addArgument(
+                 'installer',
+                 InputArgument::REQUIRED,
+                 'Installer to use'
              )
              ->addOption(
                  'production',
@@ -76,20 +62,9 @@ class AssetsInstallCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $installers  = $input->getOption('installer');
-        $production  = $input->getOption('production');
-        $directories = $this->directories->getFromInput($input);
-        $finder      = $this->finders->getForDirectories($directories);
+        $this->input = $input;
+        $this->output = $output;
 
-        foreach($installers as $installerName) {
-            $installer = $this->installers->getForName($installerName);
-
-            if (!$installer->isAvailable()) {
-                return $output->writeLn("Installer '$installerName' not available");
-            }
-
-            $output->writeLn("Running installer '$installerName'");
-            $installer->run($finder, $production);
-        }
+        $this->handle();
     }
 }

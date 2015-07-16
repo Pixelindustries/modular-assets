@@ -3,37 +3,25 @@
 namespace Pixelindustries\ModularAssets\Commands\Laravel;
 
 use Illuminate\Console\Command;
-use Pixelindustries\ModularAssets\Repositories\DirectoriesRepository;
+use Pixelindustries\ModularAssets\Support\HandlesAssetInstall;
 use Pixelindustries\ModularAssets\Repositories\FindersRepository;
 use Pixelindustries\ModularAssets\Repositories\InstallersRepository;
+use Pixelindustries\ModularAssets\Repositories\DirectoriesRepository;
 
 class AssetsInstallCommand extends Command
 {
 
+    use HandlesAssetInstall;
+
     /**
      * @var string
      */
-    protected $signature = 'assets:install {--installer?} {--directory=} {--production}';
+    protected $signature = 'assets:install {directory} {installer} {--production}';
 
     /**
      * @var string
      */
     protected $description = 'Runs various installers';
-
-    /**
-     * @var DirectoriesRepository
-     */
-    protected $directories;
-
-    /**
-     * @var FindersRepository
-     */
-    protected $finders;
-
-    /**
-     * @var InstallersRepository
-     */
-    protected $installers;
 
     /**
      * AssetsInstallCommand constructor.
@@ -48,25 +36,5 @@ class AssetsInstallCommand extends Command
         $this->directories = $directories;
         $this->finders = $finders;
         $this->installers = $installers;
-    }
-
-    public function handle()
-    {
-        $installers  = $this->input->hasOption('installer') ? $this->input->getOption('installer') : ['npm', 'bower'];
-        $production  = $this->input->getOption('production');
-        $directories = $this->directories->getFromInput($this->input);
-        $finder      = $this->finders->getForDirectories($directories);
-
-        foreach($installers as $installerName) {
-            $installer = $this->installers->getForName($installerName);
-
-            if (!$installer->isAvailable()) {
-                $this->error("Installer '$installerName' not available");
-                return;
-            }
-
-            $this->info("Running installer '$installerName'");
-            $installer->run($finder, $production);
-        }
     }
 }

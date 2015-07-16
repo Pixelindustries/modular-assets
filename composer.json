@@ -14,8 +14,10 @@
       }
     },
     "require": {
-        "symfony/finder": "^2.7"
+        "symfony/finder": "^2.7",
+        "illuminate/console": "^5.0.0"
     },
+    "bin": ["bin/asgard-installer"],
     "require-dev": {
         "phpspec/phpspec": "^2.2",
         "symfony/console": "^2.7"

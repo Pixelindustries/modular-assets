@@ -18,7 +18,7 @@
         "illuminate/console": "^5.0.0",
         "symfony/console": "^2.7"
     },
-    "bin": ["bin/asgard-installer"],
+    "bin": ["bin/asset-installer"],
     "require-dev": {
         "phpspec/phpspec": "^2.2"
     }
